@@ -48,9 +48,7 @@ namespace SafeExamBrowser.Runtime
 			// We need to show the runtime window here already, this way implicitly setting it as the runtime application's main window.
 			// Otherwise, the splash screen is considered as the main window and thus the operating system and/or WPF does not correctly
 			// activate the runtime window once bootstrapping has finished, which in turn leads to undesired user interface behavior.
-			runtimeWindow.Show();
-			runtimeWindow.BringToForeground();
-			runtimeWindow.SetIndeterminate();
+			runtimeWindow.Hide();
 
 			splashScreen.Show();
 			splashScreen.BringToForeground();
@@ -68,6 +66,7 @@ namespace SafeExamBrowser.Runtime
 
 				responsibilities.Delegate(RuntimeTask.StartSession);
 				responsibilities.Delegate(RuntimeTask.StartIntegrityMonitoring);
+				runtimeWindow.Hide();
 			}
 			else
 			{

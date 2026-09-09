@@ -148,6 +148,8 @@ namespace SafeExamBrowser.UserInterface.Mobile.Windows
 			ProgressBar.DataContext = model;
 			StatusTextBlock.DataContext = model;
 
+			ShowInTaskbar = false;
+			Visibility = Visibility.Collapsed;
 			Closed += (o, args) => closed?.Invoke();
 			Closing += (o, args) => args.Cancel = !allowClose;
 

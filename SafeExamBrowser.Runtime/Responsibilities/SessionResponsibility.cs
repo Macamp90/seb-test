@@ -59,8 +59,7 @@ namespace SafeExamBrowser.Runtime.Responsibilities
 
 		private void StartSession()
 		{
-			runtimeWindow.Show();
-			runtimeWindow.BringToForeground();
+			runtimeWindow.Hide();
 			runtimeWindow.ShowProgressBar = true;
 
 			Logger.Info(AppendDivider("Session Start Procedure"));
@@ -94,8 +93,7 @@ namespace SafeExamBrowser.Runtime.Responsibilities
 
 		private void StopSession()
 		{
-			runtimeWindow.Show();
-			runtimeWindow.BringToForeground();
+			runtimeWindow.Hide();
 			runtimeWindow.ShowProgressBar = true;
 
 			Logger.Info(AppendDivider("Session Stop Procedure"));
@@ -120,13 +118,11 @@ namespace SafeExamBrowser.Runtime.Responsibilities
 
 			runtimeWindow.ShowProgressBar = false;
 			runtimeWindow.ShowLog = Session.Settings.Security.AllowApplicationLogAccess;
-			runtimeWindow.TopMost = Session.Settings.Security.KioskMode != KioskMode.None;
+			runtimeWindow.TopMost = false;
+			runtimeWindow.Hide();
 			runtimeWindow.UpdateStatus(TextKey.RuntimeWindow_ApplicationRunning);
 
-			if (Session.Settings.Security.KioskMode == KioskMode.DisableExplorerShell)
-			{
-				runtimeWindow.Hide();
-			}
+			runtimeWindow.Hide();
 		}
 
 		private void HandleSessionStartFailure()
@@ -157,7 +153,8 @@ namespace SafeExamBrowser.Runtime.Responsibilities
 
 				runtimeWindow.ShowProgressBar = false;
 				runtimeWindow.UpdateStatus(TextKey.RuntimeWindow_ApplicationRunning);
-				runtimeWindow.TopMost = Session.Settings.Security.KioskMode != KioskMode.None;
+				runtimeWindow.TopMost = false;
+			runtimeWindow.Hide();
 
 				if (Session.Settings.Security.KioskMode == KioskMode.DisableExplorerShell)
 				{
