@@ -1,0 +1,45 @@
+name: Build SafeExamBrowser
+
+on:
+  push:
+    branches: [ main, master, '**' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        platform: [x64, x86]
+        configuration: [Release]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: 'latest'
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Restore NuGet packages
+      run: nuget restore SafeExamBrowser.sln
+
+    - name: Build SafeExamBrowser Solution
+      run: |
+        msbuild SafeExamBrowser.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /verbosity:minimal /m
+
+    - name: Upload Build Artifacts (Client, Runtime, Config)
+      uses: actions/upload-artifact@v4
+      with:
+        name: SafeExamBrowser-${{ matrix.platform }}-${{ matrix.configuration }}
+        path: |
+          SafeExamBrowser.Client/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
+          SafeExamBrowser.Runtime/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
+          SebWindowsConfig/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
