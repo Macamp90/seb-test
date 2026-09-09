@@ -2,9 +2,9 @@ name: Build SafeExamBrowser
 
 on:
   push:
-    branches: [ main, master, '**' ]
+    branches: [ '**' ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ '**' ]
   workflow_dispatch:
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
       run: |
         msbuild SafeExamBrowser.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /verbosity:minimal /m
 
-    - name: Upload Build Artifacts (Client, Runtime, Config)
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: SafeExamBrowser-${{ matrix.platform }}-${{ matrix.configuration }}
@@ -43,3 +43,5 @@ jobs:
           SafeExamBrowser.Client/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
           SafeExamBrowser.Runtime/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
           SebWindowsConfig/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
+          SafeExamBrowser.ResetUtility/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
+          SafeExamBrowser.Service/bin/${{ matrix.platform }}/${{ matrix.configuration }}/**
