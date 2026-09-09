@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2025 ETH Zürich, IT Services
+ * Copyright (c) 2026 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -240,7 +240,14 @@ namespace SafeExamBrowser.UserInterface.Desktop.Windows
 
 		private void BrowserWindow_Closing(object sender, CancelEventArgs e)
 		{
-			closing?.Invoke();
+			if (isMainWindow)
+			{
+				e.Cancel = true;
+			}
+			else
+			{
+				closing?.Invoke();
+			}
 		}
 
 		private void BrowserWindow_KeyDown(object sender, KeyEventArgs e)
@@ -336,7 +343,11 @@ namespace SafeExamBrowser.UserInterface.Desktop.Windows
 		private void BrowserWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			Handle = new WindowInteropHelper(this).Handle;
-			this.EnableCloseButton();
+
+			if (isMainWindow)
+			{
+				this.DisableCloseButton();
+			}
 		}
 
 		private void FindbarCloseButton_Click(object sender, RoutedEventArgs e)
@@ -502,19 +513,19 @@ if (typeof __SEB_focusElement === 'undefined') {
 
 		private void ApplySettings()
 		{
-			BackwardButton.IsEnabled = true;
-			BackwardButton.Visibility = Visibility.Visible;
-			DeveloperConsoleMenuItem.Visibility = Visibility.Visible;
-			FindMenuItem.Visibility = Visibility.Visible;
-			ForwardButton.IsEnabled = true;
-			ForwardButton.Visibility = Visibility.Visible;
-			HomeButton.IsEnabled = true;
-			HomeButton.Visibility = Visibility.Visible;
-			ReloadButton.IsEnabled = true;
-			ReloadButton.Visibility = Visibility.Visible;
-			Toolbar.Visibility = Visibility.Visible;
-			UrlTextBox.Visibility = Visibility.Visible;
-			ZoomMenuItem.Visibility = Visibility.Visible;
+			BackwardButton.IsEnabled = WindowSettings.AllowBackwardNavigation;
+			BackwardButton.Visibility = WindowSettings.AllowBackwardNavigation ? Visibility.Visible : Visibility.Collapsed;
+			DeveloperConsoleMenuItem.Visibility = WindowSettings.AllowDeveloperConsole ? Visibility.Visible : Visibility.Collapsed;
+			FindMenuItem.Visibility = settings.AllowFind ? Visibility.Visible : Visibility.Collapsed;
+			ForwardButton.IsEnabled = WindowSettings.AllowForwardNavigation;
+			ForwardButton.Visibility = WindowSettings.AllowForwardNavigation ? Visibility.Visible : Visibility.Collapsed;
+			HomeButton.IsEnabled = WindowSettings.ShowHomeButton;
+			HomeButton.Visibility = WindowSettings.ShowHomeButton ? Visibility.Visible : Visibility.Collapsed;
+			ReloadButton.IsEnabled = WindowSettings.AllowReloading;
+			ReloadButton.Visibility = WindowSettings.ShowReloadButton ? Visibility.Visible : Visibility.Collapsed;
+			Toolbar.Visibility = WindowSettings.ShowToolbar ? Visibility.Visible : Visibility.Collapsed;
+			UrlTextBox.Visibility = WindowSettings.AllowAddressBar ? Visibility.Visible : Visibility.Hidden;
+			ZoomMenuItem.Visibility = settings.AllowPageZoom ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		private void InitializeBounds()
