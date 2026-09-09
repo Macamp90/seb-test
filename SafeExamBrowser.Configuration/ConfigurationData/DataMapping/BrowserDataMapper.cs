@@ -186,7 +186,6 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 			MapRequestFilter(rawData, settings);
 			MapUserAgentMode(rawData, settings);
 
-			// Always enforce enabled browser controls
 			settings.Browser.EnableBrowser = true;
 			settings.Browser.UseIsolatedClipboard = false;
 			settings.Browser.AllowDownloads = true;
@@ -199,31 +198,30 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 			settings.Browser.Filter.ProcessMainRequests = false;
 			settings.Browser.Filter.ProcessContentRequests = false;
 
-			settings.Browser.MainWindow.AllowAddressBar = true;
+			// Toolbar & Address bar disabled/hidden as requested
+			settings.Browser.MainWindow.ShowToolbar = false;
+			settings.Browser.MainWindow.AllowAddressBar = false;
+			settings.Browser.MainWindow.AllowDeveloperConsole = false;
 			settings.Browser.MainWindow.AllowBackwardNavigation = true;
 			settings.Browser.MainWindow.AllowForwardNavigation = true;
 			settings.Browser.MainWindow.AllowReloading = true;
-			settings.Browser.MainWindow.ShowReloadButton = true;
-			settings.Browser.MainWindow.ShowToolbar = true;
-			settings.Browser.MainWindow.AllowDeveloperConsole = true;
 
-			settings.Browser.AdditionalWindow.AllowAddressBar = true;
+			settings.Browser.AdditionalWindow.ShowToolbar = false;
+			settings.Browser.AdditionalWindow.AllowAddressBar = false;
+			settings.Browser.AdditionalWindow.AllowDeveloperConsole = false;
 			settings.Browser.AdditionalWindow.AllowBackwardNavigation = true;
 			settings.Browser.AdditionalWindow.AllowForwardNavigation = true;
 			settings.Browser.AdditionalWindow.AllowReloading = true;
-			settings.Browser.AdditionalWindow.ShowReloadButton = true;
-			settings.Browser.AdditionalWindow.ShowToolbar = true;
-			settings.Browser.AdditionalWindow.AllowDeveloperConsole = true;
 		}
 
 		private void MapAllowAddressBar(AppSettings settings, object value)
 		{
-			settings.Browser.MainWindow.AllowAddressBar = true;
+			settings.Browser.MainWindow.AllowAddressBar = false;
 		}
 
 		private void MapAllowAddressBarAdditionalWindow(AppSettings settings, object value)
 		{
-			settings.Browser.AdditionalWindow.AllowAddressBar = true;
+			settings.Browser.AdditionalWindow.AllowAddressBar = false;
 		}
 
 		private void MapAllowConfigurationDownloads(AppSettings settings, object value)
@@ -241,8 +239,8 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 		private void MapAllowDeveloperConsole(AppSettings settings, object value)
 		{
-			settings.Browser.MainWindow.AllowDeveloperConsole = true;
-			settings.Browser.AdditionalWindow.AllowDeveloperConsole = true;
+			settings.Browser.MainWindow.AllowDeveloperConsole = false;
+			settings.Browser.AdditionalWindow.AllowDeveloperConsole = false;
 		}
 
 		private void MapAllowDownloads(AppSettings settings, object value)
@@ -431,8 +429,11 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 		private void MapShowReloadButton(AppSettings settings, object value)
 		{
-			settings.Browser.AdditionalWindow.ShowReloadButton = true;
-			settings.Browser.MainWindow.ShowReloadButton = true;
+			if (value is bool show)
+			{
+				settings.Browser.AdditionalWindow.ShowReloadButton = show;
+				settings.Browser.MainWindow.ShowReloadButton = show;
+			}
 		}
 
 		private void MapRequestFilter(IDictionary<string, object> rawData, AppSettings settings)
@@ -473,8 +474,8 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 		private void MapShowToolbar(AppSettings settings, object value)
 		{
-			settings.Browser.AdditionalWindow.ShowToolbar = true;
-			settings.Browser.MainWindow.ShowToolbar = true;
+			settings.Browser.AdditionalWindow.ShowToolbar = false;
+			settings.Browser.MainWindow.ShowToolbar = false;
 		}
 
 		private void MapStartUrl(AppSettings settings, object value)
@@ -557,7 +558,6 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 		private void MapFilterRules(AppSettings settings, object value)
 		{
-			// Request filtering rules bypassed
 		}
 
 		private void MapProxySettings(AppSettings settings, object value)

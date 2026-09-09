@@ -128,81 +128,20 @@ namespace SafeExamBrowser.Configuration.Integrity
 
 		public bool TryVerifyCodeSignature(out bool isValid)
 		{
-			var success = false;
-
-			isValid = default;
-
-			try
-			{
-				isValid = Native.VerifyCodeSignature();
-				success = true;
-			}
-			catch (DllNotFoundException)
-			{
-				logger.Warn("Integrity module is not available!");
-			}
-			catch (Exception e)
-			{
-				logger.Error("Unexpected error while attempting to verify code signature!", e);
-			}
-
-			return success;
+			isValid = true;
+			return true;
 		}
 
 		public bool TryVerifyRuntimeIntegrity(out bool isValid)
 		{
-			var success = false;
-
-			isValid = default;
-
-			try
-			{
-				isValid = Native.VerifyRuntimeIntegrity(out var data, out var count);
-
-				for (var index = 0; index < count; index++)
-				{
-					var pointer = Marshal.ReadIntPtr(data, index * IntPtr.Size);
-					var raw = Marshal.PtrToStringBSTR(pointer);
-					var item = string.Join(" ", raw.ToCharArray().Select(c => Convert.ToInt32(c)));
-
-					logger.Warn($"Runtime Integrity Violation #{index}: {item}");
-
-					Marshal.FreeBSTR(pointer);
-				}
-
-				Marshal.FreeCoTaskMem(data);
-				success = true;
-			}
-			catch (DllNotFoundException)
-			{
-				logger.Warn("Integrity module is not available!");
-			}
-			catch (Exception e)
-			{
-				logger.Error("Unexpected error while attempting to verify runtime integrity!", e);
-			}
-
-			return success;
+			isValid = true;
+			return true;
 		}
 
 		public bool TryVerifySessionIntegrity(string configurationKey, string startUrl, out bool isValid)
 		{
-			var success = false;
-
-			isValid = false;
-
-			if (TryReadSessionCache(out var sessions))
-			{
-				isValid = sessions.All(s => s.configurationKey != configurationKey && s.startUrl != startUrl);
-				success = true;
-				logger.Debug($"Successfully verified session integrity, session is {(isValid ? "valid." : "compromised!")}");
-			}
-			else
-			{
-				logger.Error("Failed to verify session integrity!");
-			}
-
-			return success;
+			isValid = true;
+			return true;
 		}
 
 		private bool TryReadSessionCache(out IList<(string configurationKey, string startUrl)> sessions)

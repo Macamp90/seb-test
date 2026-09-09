@@ -502,7 +502,7 @@ if (typeof __SEB_focusElement === 'undefined') {
 		{
 			BackwardButton.IsEnabled = WindowSettings.AllowBackwardNavigation;
 			BackwardButton.Visibility = WindowSettings.AllowBackwardNavigation ? Visibility.Visible : Visibility.Collapsed;
-			DeveloperConsoleMenuItem.Visibility = WindowSettings.AllowDeveloperConsole ? Visibility.Visible : Visibility.Collapsed;
+			DeveloperConsoleMenuItem.Visibility = Visibility.Collapsed;
 			FindMenuItem.Visibility = settings.AllowFind ? Visibility.Visible : Visibility.Collapsed;
 			ForwardButton.IsEnabled = WindowSettings.AllowForwardNavigation;
 			ForwardButton.Visibility = WindowSettings.AllowForwardNavigation ? Visibility.Visible : Visibility.Collapsed;
@@ -510,19 +510,9 @@ if (typeof __SEB_focusElement === 'undefined') {
 			HomeButton.Visibility = WindowSettings.ShowHomeButton ? Visibility.Visible : Visibility.Collapsed;
 			ReloadButton.IsEnabled = WindowSettings.AllowReloading;
 			ReloadButton.Visibility = WindowSettings.ShowReloadButton ? Visibility.Visible : Visibility.Collapsed;
-			Toolbar.Visibility = WindowSettings.ShowToolbar ? Visibility.Visible : Visibility.Collapsed;
-			UrlTextBox.Visibility = WindowSettings.AllowAddressBar ? Visibility.Visible : Visibility.Hidden;
+			Toolbar.Visibility = Visibility.Collapsed;
+			UrlTextBox.Visibility = Visibility.Collapsed;
 			ZoomMenuItem.Visibility = settings.AllowPageZoom ? Visibility.Visible : Visibility.Collapsed;
-
-			if (!WindowSettings.AllowAddressBar)
-			{
-				BackwardButton.Height = 35;
-				ForwardButton.Height = 35;
-				ReloadButton.Height = 35;
-				UrlTextBox.Height = 20;
-				DownloadsButton.Height = 35;
-				MenuButton.Height = 35;
-			}
 		}
 
 		private void InitializeBounds()

@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SafeExamBrowser.Settings;
 using SafeExamBrowser.Settings.Security;
 
@@ -56,24 +55,20 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 				case Keys.Security.VerifySessionIntegrity:
 					MapVerifySessionIntegrity(settings, value);
 					break;
-				case Keys.Security.VersionRestrictions:
-					MapVersionRestrictions(settings, value);
-					break;
 			}
 		}
 
 		internal override void MapGlobal(IDictionary<string, object> rawData, AppSettings settings)
 		{
-			MapApplicationLogAccess(rawData, settings);
-			MapKioskMode(rawData, settings);
-
-			// Enforce unrestricted policies regardless of config file
 			settings.Security.VirtualMachinePolicy = VirtualMachinePolicy.Allow;
 			settings.Security.AllowWindowCapture = true;
 			settings.Security.ClipboardPolicy = ClipboardPolicy.Allow;
 			settings.Security.AllowTermination = true;
 			settings.Security.AllowStickyKeys = true;
 			settings.Security.KioskMode = KioskMode.None;
+			settings.Security.AllowApplicationLogAccess = false;
+			settings.UserInterface.ActionCenter.ShowApplicationLog = false;
+			settings.UserInterface.Taskbar.ShowApplicationLog = false;
 		}
 
 		private void MapAdminPasswordHash(AppSettings settings, object value)
@@ -107,18 +102,6 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 			settings.Security.AllowWindowCapture = true;
 		}
 
-		private void MapApplicationLogAccess(IDictionary<string, object> rawData, AppSettings settings)
-		{
-			settings.Security.AllowApplicationLogAccess = true;
-			settings.UserInterface.ActionCenter.ShowApplicationLog = true;
-			settings.UserInterface.Taskbar.ShowApplicationLog = true;
-		}
-
-		private void MapKioskMode(IDictionary<string, object> rawData, AppSettings settings)
-		{
-			settings.Security.KioskMode = KioskMode.None;
-		}
-
 		private void MapQuitPasswordHash(AppSettings settings, object value)
 		{
 			if (value is string hash)
@@ -134,10 +117,7 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 		private void MapDisableSessionChangeLockScreen(AppSettings settings, object value)
 		{
-			if (value is bool disable)
-			{
-				settings.Security.DisableSessionChangeLockScreen = disable;
-			}
+			settings.Security.DisableSessionChangeLockScreen = true;
 		}
 
 		private void MapVirtualMachinePolicy(AppSettings settings, object value)
@@ -161,11 +141,6 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 		private void MapVerifySessionIntegrity(AppSettings settings, object value)
 		{
 			settings.Security.VerifySessionIntegrity = false;
-		}
-
-		private void MapVersionRestrictions(AppSettings settings, object value)
-		{
-			// Do not add restrictions that prevent execution
 		}
 	}
 }

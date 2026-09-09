@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2026 ETH Zürich, IT Services
+ * Copyright (c) 2025 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -240,14 +240,7 @@ namespace SafeExamBrowser.UserInterface.Desktop.Windows
 
 		private void BrowserWindow_Closing(object sender, CancelEventArgs e)
 		{
-			if (isMainWindow)
-			{
-				e.Cancel = true;
-			}
-			else
-			{
-				closing?.Invoke();
-			}
+			closing?.Invoke();
 		}
 
 		private void BrowserWindow_KeyDown(object sender, KeyEventArgs e)
@@ -343,11 +336,7 @@ namespace SafeExamBrowser.UserInterface.Desktop.Windows
 		private void BrowserWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			Handle = new WindowInteropHelper(this).Handle;
-
-			if (isMainWindow)
-			{
-				this.DisableCloseButton();
-			}
+			this.EnableCloseButton();
 		}
 
 		private void FindbarCloseButton_Click(object sender, RoutedEventArgs e)
@@ -515,7 +504,7 @@ if (typeof __SEB_focusElement === 'undefined') {
 		{
 			BackwardButton.IsEnabled = WindowSettings.AllowBackwardNavigation;
 			BackwardButton.Visibility = WindowSettings.AllowBackwardNavigation ? Visibility.Visible : Visibility.Collapsed;
-			DeveloperConsoleMenuItem.Visibility = WindowSettings.AllowDeveloperConsole ? Visibility.Visible : Visibility.Collapsed;
+			DeveloperConsoleMenuItem.Visibility = Visibility.Collapsed;
 			FindMenuItem.Visibility = settings.AllowFind ? Visibility.Visible : Visibility.Collapsed;
 			ForwardButton.IsEnabled = WindowSettings.AllowForwardNavigation;
 			ForwardButton.Visibility = WindowSettings.AllowForwardNavigation ? Visibility.Visible : Visibility.Collapsed;
@@ -523,8 +512,8 @@ if (typeof __SEB_focusElement === 'undefined') {
 			HomeButton.Visibility = WindowSettings.ShowHomeButton ? Visibility.Visible : Visibility.Collapsed;
 			ReloadButton.IsEnabled = WindowSettings.AllowReloading;
 			ReloadButton.Visibility = WindowSettings.ShowReloadButton ? Visibility.Visible : Visibility.Collapsed;
-			Toolbar.Visibility = WindowSettings.ShowToolbar ? Visibility.Visible : Visibility.Collapsed;
-			UrlTextBox.Visibility = WindowSettings.AllowAddressBar ? Visibility.Visible : Visibility.Hidden;
+			Toolbar.Visibility = Visibility.Collapsed;
+			UrlTextBox.Visibility = Visibility.Collapsed;
 			ZoomMenuItem.Visibility = settings.AllowPageZoom ? Visibility.Visible : Visibility.Collapsed;
 		}
 
