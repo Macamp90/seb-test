@@ -336,7 +336,11 @@ namespace SafeExamBrowser.UserInterface.Desktop.Windows
 		private void BrowserWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			Handle = new WindowInteropHelper(this).Handle;
-			this.EnableCloseButton();
+
+			if (isMainWindow)
+			{
+				this.DisableCloseButton();
+			}
 		}
 
 		private void FindbarCloseButton_Click(object sender, RoutedEventArgs e)
