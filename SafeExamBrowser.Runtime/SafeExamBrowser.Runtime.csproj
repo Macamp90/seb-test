@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Desktop\DesktopAppearance.cs" />
     <Compile Include="Communication\ClientBridge.cs" />
     <Compile Include="Operations\Bootstrap\BootstrapOperationSequence.cs" />
     <Compile Include="Operations\Session\ClientOperation.cs" />

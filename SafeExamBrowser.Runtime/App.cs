@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025 ETH Zürich, IT Services
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -11,12 +11,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using SafeExamBrowser.Configuration.Contracts;
+using SafeExamBrowser.Runtime.Desktop;
 
 namespace SafeExamBrowser.Runtime
 {
 	public class App : Application
 	{
 		private static readonly Mutex Mutex = new Mutex(true, AppConfig.RUNTIME_MUTEX_NAME);
+		private static readonly DesktopAppearance DesktopAppearance = new DesktopAppearance();
 		private readonly CompositionRoot instances = new CompositionRoot();
 
 		[STAThread]
@@ -32,6 +34,7 @@ namespace SafeExamBrowser.Runtime
 			}
 			finally
 			{
+				RestoreDesktop();
 				Mutex.Close();
 			}
 		}
@@ -59,6 +62,13 @@ namespace SafeExamBrowser.Runtime
 
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
+			var desktopWarning = DesktopAppearance.Apply();
+
+			if (!string.IsNullOrEmpty(desktopWarning))
+			{
+				MessageBox.Show(desktopWarning, "Personalizzazione desktop incompleta", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+
 			instances.BuildObjectGraph(Shutdown);
 			instances.LogStartupInformation();
 
@@ -82,10 +92,33 @@ namespace SafeExamBrowser.Runtime
 
 		private void ShutdownInternal()
 		{
-			instances.RuntimeController.Terminate();
-			instances.LogShutdownInformation();
+			try
+			{
+				instances.RuntimeController.Terminate();
+				instances.LogShutdownInformation();
+			}
+			finally
+			{
+				RestoreDesktop();
+				Dispatcher.Invoke(base.Shutdown);
+			}
+		}
 
-			Dispatcher.Invoke(base.Shutdown);
+		protected override void OnExit(ExitEventArgs e)
+		{
+			RestoreDesktop();
+			base.OnExit(e);
+		}
+
+		private static void RestoreDesktop()
+		{
+			var warning = DesktopAppearance.Restore();
+
+			if (!string.IsNullOrEmpty(warning))
+			{
+				MessageBox.Show(warning + "\n\nÈ possibile ripristinare lo sfondo da Impostazioni > Personalizzazione e le icone da Visualizza > Mostra icone del desktop.",
+					"Ripristino desktop incompleto", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
 		}
 	}
 }
