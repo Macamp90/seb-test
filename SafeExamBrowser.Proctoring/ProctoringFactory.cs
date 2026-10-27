@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -6,14 +6,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+using System;
 using System.Collections.Generic;
 using SafeExamBrowser.Browser.Contracts;
 using SafeExamBrowser.Configuration.Contracts;
 using SafeExamBrowser.I18n.Contracts;
 using SafeExamBrowser.Logging.Contracts;
 using SafeExamBrowser.Monitoring.Contracts.Applications;
-using SafeExamBrowser.Proctoring.ScreenProctoring;
-using SafeExamBrowser.Proctoring.ScreenProctoring.Service;
 using SafeExamBrowser.Settings.Proctoring;
 using SafeExamBrowser.SystemComponents.Contracts;
 using SafeExamBrowser.UserInterface.Contracts;
@@ -58,10 +57,7 @@ namespace SafeExamBrowser.Proctoring
 
 			if (settings.ScreenProctoring.Enabled)
 			{
-				var logger = this.logger.CloneFor(nameof(ScreenProctoring));
-				var service = new ServiceProxy(logger.CloneFor(nameof(ServiceProxy)));
-
-				implementations.Add(new ScreenProctoringImplementation(appConfig, applicationMonitor, browser, logger, nativeMethods, service, settings, text));
+				throw new NotSupportedException("Screen Proctoring is not included in this custom build. Use an official build for sessions that require it.");
 			}
 
 			return implementations;

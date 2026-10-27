@@ -43,6 +43,13 @@ namespace SafeExamBrowser.Client.Operations
 
 		public override OperationResult Perform()
 		{
+			if (Context.Settings.Proctoring.ScreenProctoring.Enabled)
+			{
+				logger.Error("Screen Proctoring is not included in this custom build. This session requires an official build with Screen Proctoring support.");
+
+				return OperationResult.Failed;
+			}
+
 			if (Context.Settings.Proctoring.Enabled)
 			{
 				logger.Info("Initializing proctoring...");
