@@ -53,9 +53,15 @@ namespace SafeExamBrowser.UserInterface.Mobile.Windows
 			{
 				var result = new PasswordDialogResult { Success = false };
 
-				if (parent is Window)
+				// WPF cannot use a window which has never been shown as an owner.
+				// During startup the runtime window may still be hidden.
+				if (parent is Window owner && owner.IsVisible)
 				{
-					Owner = parent as Window;
+					Owner = owner;
+				}
+				else
+				{
+					Owner = null;
 				}
 
 				InitializeBounds();
